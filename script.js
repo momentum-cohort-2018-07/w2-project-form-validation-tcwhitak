@@ -8,7 +8,7 @@ function addErrorMsg(item) {
   errorDiv.classList.add("error-msg");
   errorDiv.style.color = "red";
   errorDiv.innerText = "is required";
-  item.parentElement.appendChild(errorDiv);
+  item.parentElement.firstElementChild.insertAdjacentElement('afterend', errorDiv)
 }
 
 function clear(item) {
@@ -21,8 +21,7 @@ function clear(item) {
   }
 }
 document
-  .getElementById("parking-form")
-  .addEventListener("submit", function(event) {
+  .getElementById("parking-form").addEventListener("submit", function(event) {
     event.preventDefault();
 
     var childInvalid = false;
