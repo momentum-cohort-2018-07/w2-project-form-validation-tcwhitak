@@ -46,6 +46,11 @@ document
         singleInput.parentElement.classList.add("input-valid");
       }
     }
+
+    if (isNaN(document.querySelector('#car-year').value.trim())) {
+        childInvalid = true
+    }
+
     if (childInvalid === true) {
       addErrorMsg(document.querySelector(".input-group"));
       document
