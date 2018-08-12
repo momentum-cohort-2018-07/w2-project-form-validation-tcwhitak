@@ -107,46 +107,40 @@ document
       }
     }
 
-    //show total parking cost if there is no errors
-    var errors = document.querySelector(".error-msg");
-    //if errors are not present, get total and show it at total div
-    if (!errors) {
-      var parkStartDate = new Date(document.getElementById("start-date").value);
-      var revParkStartDate = new Date(parkStartDate.getTime() + 15250000);
-      var daysParking = parseInt(document.getElementById("days").value);
-      var datesParked = getDatesParked(revParkStartDate, daysParking);
-      function getDatesParked(revParkStartDate, daysParking) {
-        var dates = [];
-        for (i = 0; i < daysParking; i++) {
-          if (i === 0) {
-            dates.push(revParkStartDate);
-          } else {
-            var nextDay = new Date(revParkStartDate.getTime() + 86400000 * i);
-            dates.push(nextDay);
-          }
-        }
-        return dates;
-      }
-      //determine daily rate based on weekday ($5) or weekend rate ($7) and create array of rates
-      var dailyRates = datesParked.map(function(day) {
-          if (day.getDay() == 6 || day.getDay() == 0) {
-           var dailyRate = 7;
-          } else {
-          var dailyRate = 5;
-          }
-          return dailyRate
-        }
-      );
-      //sum up each daily rate from previously created array
-      var total = dailyRates.reduce(function(sum, rate) {
-        return sum + rate;
-      }, 0);
-      document.getElementById("total").innerText = "Total: $"+total+".00";
-    } 
-    //if errors are present, do this
-    else {
-      document.getElementById("total").innerText = "";
+
+    //insert functions for credit card validation
+    function validateCardNumber(number) {
+      var regex = new RegExp("^[0-9]{16}$");
+      if (!regex.test(number)) return false;
+
+      return luhnCheck(number);
     }
+
+    function luhnCheck(val) {
+      var sum = 0;
+      for (var i = 0; i < val.length; i++) {
+        var intVal = parseInt(val.substr(i, 1));
+        if (i % 2 == 0) {
+          intVal *= 2;
+          if (intVal > 9) {
+            intVal = 1 + (intVal % 10);
+          }
+        }
+        sum += intVal;
+      }
+      return sum % 10 == 0;
+    }
+
+//if function to check credit card and apply appropriate classes to parent
+var creditCardInt = parseInt(document.getElementById("credit-card").value)
+if (!validateCardNumber(creditCardInt)){
+  document.querySelector("#credit-card")
+  .parentElement.classList.remove("input-valid");
+document
+  .querySelector("#credit-card")
+  .parentElement.classList.add("input-invalid");
+addErrorMsg(document.querySelector("#credit-card"));
+}
 
     //if any of the car inputs are invalid then apply appropriate class to the input field div, not direct parent
     if (childInvalid === true) {
@@ -161,4 +155,47 @@ document
         .parentElement.classList.add("input-valid");
       document.querySelector(".input-group").classList.add("input-valid");
     }
-  });
+
+
+
+      //show total parking cost if there is no errors
+      var errors = document.querySelector(".error-msg");
+      //if errors are not present, get total and show it at total div
+      if (!errors) {
+        var parkStartDate = new Date(document.getElementById("start-date").value);
+        var revParkStartDate = new Date(parkStartDate.getTime() + 15250000);
+        var daysParking = parseInt(document.getElementById("days").value);
+        var datesParked = getDatesParked(revParkStartDate, daysParking);
+        function getDatesParked(revParkStartDate, daysParking) {
+          var dates = [];
+          for (i = 0; i < daysParking; i++) {
+            if (i === 0) {
+              dates.push(revParkStartDate);
+            } else {
+              var nextDay = new Date(revParkStartDate.getTime() + 86400000 * i);
+              dates.push(nextDay);
+            }
+          }
+          return dates;
+        }
+        //determine daily rate based on weekday ($5) or weekend rate ($7) and create array of rates
+        var dailyRates = datesParked.map(function(day) {
+          if (day.getDay() == 6 || day.getDay() == 0) {
+            var dailyRate = 7;
+          } else {
+            var dailyRate = 5;
+          }
+          return dailyRate;
+        });
+        //sum up each daily rate from previously created array
+        var total = dailyRates.reduce(function(sum, rate) {
+          return sum + rate;
+        }, 0);
+        document.getElementById("total").innerText = "Total: $" + total + ".00";
+      }
+      //if errors are present, do this
+      else {
+        document.getElementById("total").innerText = "";
+      }
+
+    });

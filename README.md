@@ -24,13 +24,13 @@ This message should go away if the field is later marked as valid. This message 
 
 Add the following validations:
 
-* Car year must be a number.
-* Car year must be after 1900.
-* Car year cannot be in the future.
-* Date parking must be in the future.
-* Number of days must be a number.
-* Number of days must be between 1 and 30.
-* CVV must be a three-digit number.
+- Car year must be a number.
+- Car year must be after 1900.
+- Car year cannot be in the future.
+- Date parking must be in the future.
+- Number of days must be a number.
+- Number of days must be between 1 and 30.
+- CVV must be a three-digit number.
 
 ### Step 4
 
@@ -44,26 +44,25 @@ Validate the format of the credit card number. The following code will let you k
 
 ```js
 function validateCardNumber(number) {
-    var regex = new RegExp("^[0-9]{16}$");
-    if (!regex.test(number))
-        return false;
+  var regex = new RegExp("^[0-9]{16}$");
+  if (!regex.test(number)) return false;
 
-    return luhnCheck(number);
+  return luhnCheck(number);
 }
 
 function luhnCheck(val) {
-    var sum = 0;
-    for (var i = 0; i < val.length; i++) {
-        var intVal = parseInt(val.substr(i, 1));
-        if (i % 2 == 0) {
-            intVal *= 2;
-            if (intVal > 9) {
-                intVal = 1 + (intVal % 10);
-            }
-        }
-        sum += intVal;
+  var sum = 0;
+  for (var i = 0; i < val.length; i++) {
+    var intVal = parseInt(val.substr(i, 1));
+    if (i % 2 == 0) {
+      intVal *= 2;
+      if (intVal > 9) {
+        intVal = 1 + (intVal % 10);
+      }
     }
-    return (sum % 10) == 0;
+    sum += intVal;
+  }
+  return sum % 10 == 0;
 }
 ```
 
@@ -73,5 +72,5 @@ This code only works with 16 digit card numbers. "4111111111111111" is a valid c
 
 Add the following validations:
 
-* Expiration date must be a valid month and year.
-* Expiration date must not be in the past.
+- Expiration date must be a valid month and year.
+- Expiration date must not be in the past.
