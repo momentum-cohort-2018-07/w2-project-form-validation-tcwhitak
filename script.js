@@ -139,7 +139,9 @@ document
       document
         .querySelector("#credit-card")
         .parentElement.classList.add("input-invalid");
-      addErrorMsg(document.querySelector("#credit-card"));
+        if (document.querySelector("#credit-card").value !== "") {
+          addErrorMsg(document.querySelector("#credit-card"));
+        }
     }
 
     //if any of the car inputs are invalid then apply appropriate class to the input field div, not direct parent
